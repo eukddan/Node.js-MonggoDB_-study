@@ -29,3 +29,9 @@ app.get("/news", (요청, 응답) => {
   db.collection("post").insertOne({ title: "어쩔티비" });
   //   응답.send("오늘 비옴");
 });
+
+app.get("/list", async (요청, 응답) => {
+  let result = await db.collection("post").find().toArray();
+  console.log(result[0].title);
+  응답.send("db에 있던 게시물");
+});

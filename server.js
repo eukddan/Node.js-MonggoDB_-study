@@ -38,14 +38,18 @@ app.get("/list", async (요청, 응답) => {
   응답.render("list.ejs", { posts: result });
 });
 
-app.get("/time", (요청, 응답) => {
-  응답.render("time.ejs", { timeData: new Date() });
-});
-
 app.get("/write", (req, res) => {
   res.render("write.ejs");
 });
 
 app.post("/newpost", (req, res) => {
-  console.log(req.body);
+  res.send("전송 완료");
+  let a = req.body.title;
+  let b = req.body.content;
+  db.collection("post").insertOne(
+    { title: a, content: b },
+    function (에러, 결과) {
+      console.log("성공");
+    }
+  );
 });

@@ -3,6 +3,8 @@ const app = express();
 
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const { MongoClient } = require("mongodb");
 
@@ -38,4 +40,12 @@ app.get("/list", async (요청, 응답) => {
 
 app.get("/time", (요청, 응답) => {
   응답.render("time.ejs", { timeData: new Date() });
+});
+
+app.get("/write", (req, res) => {
+  res.render("write.ejs");
+});
+
+app.post("/newpost", (req, res) => {
+  console.log(req.body);
 });

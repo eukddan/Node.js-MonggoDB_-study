@@ -42,14 +42,18 @@ app.get("/write", (req, res) => {
   res.render("write.ejs");
 });
 
-app.post("/newpost", (req, res) => {
-  res.send("전송 완료");
+app.post("/newpost", async (req, res) => {
   let a = req.body.title;
   let b = req.body.content;
-  db.collection("post").insertOne(
-    { title: a, content: b },
-    function (에러, 결과) {
-      console.log("성공");
+  try {
+    if (req.body.title == "" || req.body.content == "") {
+      res.send("다시 입력하세요");
+    } else {
+      await db.collection("post").insertOne({ title: a, content: b });
+      res.redirect("/list");
     }
-  );
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("서버 에러");
+  }
 });

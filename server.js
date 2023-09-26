@@ -58,10 +58,11 @@ app.post("/newpost", async (req, res) => {
   }
 });
 
-app.get("/detail/:aa", async (req, res) => {
+app.get("/detail/:id", async (req, res) => {
+  let user = req.params;
   let result = await db
     .collection("post")
-    .findOne({ _id: new ObjectId("6511584aa8f6112cb828033c") });
+    .findOne({ _id: new ObjectId(user.id) });
   console.log(result);
-  res.render("detail.ejs");
+  res.render("detail.ejs", { result: result });
 });

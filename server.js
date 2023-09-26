@@ -6,7 +6,7 @@ app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 
 let db;
 const url =
@@ -56,4 +56,12 @@ app.post("/newpost", async (req, res) => {
     console.log(error);
     res.status(500).send("서버 에러");
   }
+});
+
+app.get("/detail/:aa", async (req, res) => {
+  let result = await db
+    .collection("post")
+    .findOne({ _id: new ObjectId("6511584aa8f6112cb828033c") });
+  console.log(result);
+  res.render("detail.ejs");
 });

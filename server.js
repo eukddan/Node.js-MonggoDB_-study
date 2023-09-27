@@ -59,10 +59,16 @@ app.post("/newpost", async (req, res) => {
 });
 
 app.get("/detail/:id", async (req, res) => {
-  let user = req.params;
-  let result = await db
-    .collection("post")
-    .findOne({ _id: new ObjectId(user.id) });
-  console.log(result);
-  res.render("detail.ejs", { result: result });
+  try {
+    let user = req.params;
+    let result = await db
+      .collection("post")
+      .findOne({ _id: new ObjectId(user.id) });
+    if (result == null) {
+      res.status(400).send("그런 게시글 여기 없수다");
+    }
+    res.render("detail.ejs", { result: result });
+  } catch (error) {
+    res.send("이상한 거 넣지마셈");
+  }
 });

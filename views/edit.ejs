@@ -8,13 +8,12 @@
   </head>
   <body class="grey-bg">
     <%- include('nav.ejs') %>
-    <div class="white-bg">
-      <% for(let i=0; i<posts.length; i++){ %>
-        <div class="list-box">
-          <h4><a href="/detail/<%= posts[i]._id %>"><%= posts[i].title %></a><a href="/edit">✏️</a></h4>
-          <p><%= posts[i].content %></p>
-        </div>
-    <%  } %>
-    </div>
+
+    <form class="form-box" action="/newpost" method="post">
+      <h4>수정하기</h4>
+      <input name="title" value="<%= result.title %>" />
+      <input name="content" value="<%= result.content %>" />
+      <button type="submit">전송</button>
+    </form>
   </body>
 </html>

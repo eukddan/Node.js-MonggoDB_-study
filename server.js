@@ -72,3 +72,12 @@ app.get("/detail/:id", async (req, res) => {
     res.send("이상한 거 넣지마셈");
   }
 });
+
+app.get("/edit/:id", async (req, res) => {
+  let user = req.params;
+  let result = await db
+    .collection("post")
+    .findOne({ _id: new ObjectId(user.id) });
+  console.log(result);
+  res.render("edit.ejs", { result: result });
+});

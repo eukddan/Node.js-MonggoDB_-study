@@ -81,3 +81,25 @@ app.get("/edit/:id", async (req, res) => {
   console.log(result);
   res.render("edit.ejs", { result: result });
 });
+
+app.post("/editpost", async (req, res) => {
+  let a = req.body.title;
+  let b = req.body.content;
+  let c = req.body.id;
+  try {
+    if (req.body.title == "" || req.body.content == "") {
+      res.send("다시 입력하세요");
+    } else {
+      await db
+        .collection("post")
+        .updateOne(
+          { _id: new ObjectId(c) },
+          { $set: { title: a, content: b } }
+        );
+      res.redirect("/list");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("서버 에러");
+  }
+});

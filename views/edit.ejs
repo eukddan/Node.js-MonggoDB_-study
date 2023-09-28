@@ -9,8 +9,9 @@
   <body class="grey-bg">
     <%- include('nav.ejs') %>
 
-    <form class="form-box" action="/newpost" method="post">
+    <form class="form-box" action="/editpost" method="post">
       <h4>수정하기</h4>
+      <input name="id" value="<%= result._id %>" style="display: none" />
       <input name="title" value="<%= result.title %>" />
       <input name="content" value="<%= result.content %>" />
       <button type="submit">전송</button>

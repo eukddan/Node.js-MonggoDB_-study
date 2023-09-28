@@ -1,12 +1,13 @@
 const express = require("express");
 const app = express();
+const { MongoClient, ObjectId } = require("mongodb");
+const methodOverride = require("method-override");
 
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-const { MongoClient, ObjectId } = require("mongodb");
+app.use(methodOverride("_method"));
 
 let db;
 const url =
@@ -78,16 +79,18 @@ app.get("/edit/:id", async (req, res) => {
   let result = await db
     .collection("post")
     .findOne({ _id: new ObjectId(user.id) });
-  console.log(result);
+  // console.log(result);
   res.render("edit.ejs", { result: result });
 });
 
-app.post("/editpost", async (req, res) => {
+app.put("/editpost", async (req, res) => {
   let a = req.body.title;
   let b = req.body.content;
   let c = req.body.id;
+  // let c1 = db.collection("post").findOne({ _id: new ObjectId(c) });
+  // console.log(c1);
   try {
-    if (req.body.title == "" || req.body.content == "") {
+    if (a == "" || b == "") {
       res.send("다시 입력하세요");
     } else {
       await db

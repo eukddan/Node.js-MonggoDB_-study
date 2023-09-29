@@ -22,8 +22,11 @@
       for(let i = 0; i< '<%= posts.length %>'; i++){
         document.querySelectorAll('.delete')[i].addEventListener('click', (e)=>{
           fetch('/delete?docid='+ e.target.dataset.id, {
-          method : 'DELETE',
+          method : 'DELETE'
           // headers : {'Content-Type' : 'application/json'},
+        })
+        .then((r)=>r.text()).then((r)=>{
+          e.target.parentElement.parentElement.style.display = 'none';
         })
       })
       }

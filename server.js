@@ -106,3 +106,11 @@ app.put("/editpost", async (req, res) => {
     res.status(500).send("서버 에러");
   }
 });
+
+app.delete("/delete", async (req, res) => {
+  console.log(req.query.docid);
+  let result = await db
+    .collection("post")
+    .deleteOne({ _id: new ObjectId(req.query.docid) });
+  res.send("삭제 완료");
+});

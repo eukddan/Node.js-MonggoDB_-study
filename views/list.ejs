@@ -11,10 +11,20 @@
     <div class="white-bg">
       <% for(let i=0; i<posts.length; i++){ %>
         <div class="list-box">
-          <h4><a href="/detail/<%= posts[i]._id %>"><%= posts[i].title %></a><a href="/edit/<%= posts[i]._id%>">✏️</a></h4>
+          <h4><a href="/detail/<%= posts[i]._id %>"><%= posts[i].title %></a><a href="/edit/<%= posts[i]._id%>">✏️</a>
+          <span class="delete">🗑️</span>
+          </h4>
           <p><%= posts[i].content %></p>
         </div>
     <%  } %>
     </div>
+    <script>
+      document.querySelectorAll('.delete')[0].addEventListener('click', ()=>{
+        fetch('/delete?docid='+'<%= posts[0]._id %>', {
+          method : 'DELETE',
+          // headers : {'Content-Type' : 'application/json'},
+        })
+      })
+    </script>
   </body>
 </html>

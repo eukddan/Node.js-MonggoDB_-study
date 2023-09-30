@@ -75,3 +75,12 @@ a:link {
 a:visited {
   color: black;
 }
+
+.btn-1 {
+  float: right;
+}
+
+.btn-secondary {
+  float: left;
+  margin-right: 3px;
+}

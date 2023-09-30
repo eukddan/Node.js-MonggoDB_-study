@@ -115,12 +115,12 @@ app.delete("/delete", async (req, res) => {
   res.send("삭제 완료");
 });
 
-app.get("/list/1", async (요청, 응답) => {
-  let result = await db.collection("post").find().limit(5).toArray();
-  응답.render("list.ejs", { posts: result });
-});
-
-app.get("/list/2", async (요청, 응답) => {
-  let result = await db.collection("post").find().skip(5).limit(5).toArray();
-  응답.render("list.ejs", { posts: result });
+app.get("/list/:id", async (req, res) => {
+  let result = await db
+    .collection("post")
+    .find()
+    .skip((req.params.id - 1) * 5)
+    .limit(5)
+    .toArray();
+  res.render("list.ejs", { posts: result });
 });

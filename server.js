@@ -152,3 +152,19 @@ app.get("/list/next/:id", async (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login.ejs");
 });
+
+app.post("/login", async (req, res) => {
+  let a = req.body.username;
+  let b = req.body.password;
+  try {
+    if (a == "" || b == "") {
+      res.send("다시 입력하세요");
+    } else {
+      await db.collection("user").insertOne({ username: a, password: b });
+      res.redirect("/list");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("서버 에러");
+  }
+});

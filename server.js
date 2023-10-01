@@ -148,3 +148,7 @@ app.get("/list/next/:id", async (req, res) => {
     .toArray();
   res.render("list.ejs", { posts: result });
 });
+
+app.get("/login", (req, res) => {
+  res.render("login.ejs");
+});

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/main.css" />
+  </head>
+  <body class="grey-bg">
+    <%- include('nav.ejs') %>
+
+    <form class="form-box" action="/login" method="post">
+      <h4>LOGIN</h4>
+      ID <input name="id" /> PW <input name="pw" />
+      <button type="submit">로그인</button>
+    </form>
+  </body>
+</html>

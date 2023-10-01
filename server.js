@@ -9,6 +9,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+
+app.use(passport.initialize());
+app.use(
+  session({
+    secret: "암호화에 쓸 비번",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.session());
+
 let db;
 const url =
   "mongodb+srv://admin:qwer1234@cluster0.qggcv0f.mongodb.net/?retryWrites=true&w=majority";

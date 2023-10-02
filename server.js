@@ -149,6 +149,22 @@ app.get("/list/next/:id", async (req, res) => {
   res.render("list.ejs", { posts: result });
 });
 
+passport.use(
+  new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
+    let result = await db
+      .collection("user")
+      .findOne({ username: 입력한아이디 });
+    if (!result) {
+      return cb(null, false, { message: "아이디 DB에 없음" });
+    }
+    if (result.password == 입력한비번) {
+      return cb(null, result);
+    } else {
+      return cb(null, false, { message: "비번불일치" });
+    }
+  })
+);
+
 app.get("/login", (req, res) => {
   res.render("login.ejs");
 });
@@ -171,4 +187,15 @@ app.post("/signup", async (req, res) => {
     console.log(error);
     res.status(500).send("서버 에러");
   }
+});
+
+app.post("/login", async (req, res, next) => {
+  passport.authenticate("local", (error, user, info) => {
+    if (error) return res.status(500).json(error);
+    if (!user) return res.status(401).json(info.message);
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      res.redirect("/");
+    });
+  })(req, res, next);
 });

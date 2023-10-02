@@ -153,7 +153,11 @@ app.get("/login", (req, res) => {
   res.render("login.ejs");
 });
 
-app.post("/login", async (req, res) => {
+app.get("/signup", (req, res) => {
+  res.render("signup.ejs");
+});
+
+app.post("/signup", async (req, res) => {
   let a = req.body.username;
   let b = req.body.password;
   try {

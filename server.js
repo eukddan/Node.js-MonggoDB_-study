@@ -3,6 +3,7 @@ const app = express();
 const { MongoClient, ObjectId } = require("mongodb");
 const methodOverride = require("method-override");
 const bcrypt = require("bcrypt");
+const MongoStore = require("connect-mongo");
 
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
@@ -21,6 +22,11 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 60 * 60 * 1000 },
+    store: MongoStore.create({
+      mongoUrl:
+        "mongodb+srv://admin:qwer1234@cluster0.qggcv0f.mongodb.net/?retryWrites=true&w=majority",
+      dbName: "forum",
+    }),
   })
 );
 

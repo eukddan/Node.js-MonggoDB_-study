@@ -204,7 +204,7 @@ app.post("/signup", async (req, res) => {
       res.send("다시 입력하세요");
     } else {
       await db.collection("user").insertOne({ username: a, password: b });
-      res.redirect("/list");
+      res.redirect("/login");
     }
   } catch (error) {
     console.log(error);
@@ -218,7 +218,12 @@ app.post("/login", async (req, res, next) => {
     if (!user) return res.status(401).json(info.message);
     req.logIn(user, (err) => {
       if (err) return next(err);
-      res.redirect("/");
+      res.redirect("/mypage");
     });
   })(req, res, next);
+});
+
+app.get("/mypage", (req, res) => {
+  let result = req.user;
+  res.render("mypage.ejs", { result: result });
 });

@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const { MongoClient, ObjectId } = require("mongodb");
 const methodOverride = require("method-override");
+const bcrypt = require("bcrypt");
 
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
@@ -50,7 +51,7 @@ passport.use(
       if (!result) {
         return cb(null, false, { message: "아이디 DB에 없음" });
       }
-      if (result.password == 입력한비번) {
+      if (await bcrypt.compare(입력한비번, result.password)) {
         return cb(null, result);
       } else {
         return cb(null, false, { message: "비번불일치" });
@@ -199,11 +200,12 @@ app.get("/signup", (req, res) => {
 app.post("/signup", async (req, res) => {
   let a = req.body.username;
   let b = req.body.password;
+  let hash = await bcrypt.hash(b, 10);
   try {
     if (a == "" || b == "") {
       res.send("다시 입력하세요");
     } else {
-      await db.collection("user").insertOne({ username: a, password: b });
+      await db.collection("user").insertOne({ username: a, password: hash });
       res.redirect("/login");
     }
   } catch (error) {

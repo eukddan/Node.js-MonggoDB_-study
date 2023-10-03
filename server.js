@@ -41,6 +41,44 @@ new MongoClient(url)
     console.log(err);
   });
 
+passport.use(
+  new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
+    try {
+      let result = await db
+        .collection("user")
+        .findOne({ username: 입력한아이디 });
+      if (!result) {
+        return cb(null, false, { message: "아이디 DB에 없음" });
+      }
+      if (result.password == 입력한비번) {
+        return cb(null, result);
+      } else {
+        return cb(null, false, { message: "비번불일치" });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("서버 에러");
+    }
+  })
+);
+
+passport.serializeUser((user, done) => {
+  console.log(user);
+  process.nextTick(() => {
+    done(null, { id: user._id, username: user.username });
+  });
+});
+
+passport.deserializeUser(async (user, done) => {
+  let result = await db
+    .collection("user")
+    .findOne({ _id: new ObjectId(user.id) });
+  delete result.password;
+  process.nextTick(() => {
+    return done(null, result);
+  });
+});
+
 app.get("/", (요청, 응답) => {
   응답.sendFile(__dirname + "/index.html");
 });
@@ -148,40 +186,6 @@ app.get("/list/next/:id", async (req, res) => {
     .limit(5)
     .toArray();
   res.render("list.ejs", { posts: result });
-});
-
-passport.use(
-  new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
-    try {
-      let result = await db
-        .collection("user")
-        .findOne({ username: 입력한아이디 });
-      if (!result) {
-        return cb(null, false, { message: "아이디 DB에 없음" });
-      }
-      if (result.password == 입력한비번) {
-        return cb(null, result);
-      } else {
-        return cb(null, false, { message: "비번불일치" });
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).send("서버 에러");
-    }
-  })
-);
-
-passport.serializeUser((user, done) => {
-  console.log(user);
-  process.nextTick(() => {
-    done(null, { id: user._id, username: user.username });
-  });
-});
-
-passport.deserializeUser((user, done) => {
-  process.nextTick(() => {
-    return done(null, user);
-  });
 });
 
 app.get("/login", (req, res) => {

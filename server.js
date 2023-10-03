@@ -19,6 +19,7 @@ app.use(
     secret: "암호화에 쓸 비번",
     resave: false,
     saveUninitialized: false,
+    cookie: { maxAge: 60 * 60 * 1000 },
   })
 );
 
@@ -151,19 +152,37 @@ app.get("/list/next/:id", async (req, res) => {
 
 passport.use(
   new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
-    let result = await db
-      .collection("user")
-      .findOne({ username: 입력한아이디 });
-    if (!result) {
-      return cb(null, false, { message: "아이디 DB에 없음" });
-    }
-    if (result.password == 입력한비번) {
-      return cb(null, result);
-    } else {
-      return cb(null, false, { message: "비번불일치" });
+    try {
+      let result = await db
+        .collection("user")
+        .findOne({ username: 입력한아이디 });
+      if (!result) {
+        return cb(null, false, { message: "아이디 DB에 없음" });
+      }
+      if (result.password == 입력한비번) {
+        return cb(null, result);
+      } else {
+        return cb(null, false, { message: "비번불일치" });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("서버 에러");
     }
   })
 );
+
+passport.serializeUser((user, done) => {
+  console.log(user);
+  process.nextTick(() => {
+    done(null, { id: user._id, username: user.username });
+  });
+});
+
+passport.deserializeUser((user, done) => {
+  process.nextTick(() => {
+    return done(null, user);
+  });
+});
 
 app.get("/login", (req, res) => {
   res.render("login.ejs");

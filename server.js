@@ -206,6 +206,7 @@ app.get("/signup", (req, res) => {
 app.post("/signup", async (req, res) => {
   let a = req.body.username;
   let b = req.body.password;
+  let c = req.body.password1;
   let hash = await bcrypt.hash(b, 10);
   let dup = await db.collection("user").findOne({ username: a });
   try {
@@ -213,7 +214,11 @@ app.post("/signup", async (req, res) => {
       res.send("다시 입력하세요");
     } else if (dup) {
       res.send("중복된 아이디입니다.");
+    } else if (b != c) {
+      res.send("비밀번호가 일치하지 않습니다.");
     } else {
+      console.log(b);
+      console.log(c);
       await db.collection("user").insertOne({ username: a, password: hash });
       res.redirect("/login");
     }

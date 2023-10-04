@@ -207,9 +207,12 @@ app.post("/signup", async (req, res) => {
   let a = req.body.username;
   let b = req.body.password;
   let hash = await bcrypt.hash(b, 10);
+  let dup = await db.collection("user").findOne({ username: a });
   try {
     if (a == "" || b == "") {
       res.send("다시 입력하세요");
+    } else if (dup) {
+      res.send("중복된 아이디입니다.");
     } else {
       await db.collection("user").insertOne({ username: a, password: hash });
       res.redirect("/login");

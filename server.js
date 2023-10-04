@@ -107,12 +107,18 @@ app.get("/write", (req, res) => {
 app.post("/newpost", async (req, res) => {
   let a = req.body.title;
   let b = req.body.content;
+  let c = req.user.username;
+  let dup = await db.collection("user").findOne({ username: c });
   try {
     if (req.body.title == "" || req.body.content == "") {
       res.send("다시 입력하세요");
-    } else {
+    } else if (dup) {
       await db.collection("post").insertOne({ title: a, content: b });
       res.redirect("/list");
+    } else {
+      console.log(c);
+      console.log(dup);
+      res.send("로그인 후 이용하세요.");
     }
   } catch (error) {
     console.log(error);

@@ -4,6 +4,7 @@ const { MongoClient, ObjectId } = require("mongodb");
 const methodOverride = require("method-override");
 const bcrypt = require("bcrypt");
 const MongoStore = require("connect-mongo");
+require("dotenv").config();
 
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
@@ -33,14 +34,13 @@ app.use(
 app.use(passport.session());
 
 let db;
-const url =
-  "mongodb+srv://admin:qwer1234@cluster0.qggcv0f.mongodb.net/?retryWrites=true&w=majority";
+const url = process.env.DB_URL;
 new MongoClient(url)
   .connect()
   .then((client) => {
     console.log("DB연결성공");
     db = client.db("forum");
-    app.listen(8080, () => {
+    app.listen(precess.env.PORT, () => {
       console.log("http://localhost:8080 에서 서버 실행 중");
     });
   })

@@ -40,7 +40,7 @@ new MongoClient(url)
   .then((client) => {
     console.log("DB연결성공");
     db = client.db("forum");
-    app.listen(precess.env.PORT, () => {
+    app.listen(process.env.PORT, () => {
       console.log("http://localhost:8080 에서 서버 실행 중");
     });
   })

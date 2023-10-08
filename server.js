@@ -125,28 +125,31 @@ app.get("/write", (req, res) => {
   res.render("write.ejs");
 });
 
-app.post("/newpost", upload.single("img1"), async (req, res) => {
-  let a = req.body.title;
-  let b = req.body.content;
-  let c = req.user.username;
-  let dup = await db.collection("user").findOne({ username: c });
-  try {
-    if (req.body.title == "" || req.body.content == "") {
-      res.send("다시 입력하세요");
-    } else if (dup) {
-      await db
-        .collection("post")
-        .insertOne({ title: a, content: b, img: req.file.location });
-      res.redirect("/list");
-    } else {
-      console.log(c);
-      console.log(dup);
-      res.send("로그인 후 이용하세요.");
+app.post("/newpost", async (req, res) => {
+  upload.single("img1")(req, res, async (err) => {
+    let a = req.body.title;
+    let b = req.body.content;
+    let c = req.user.username;
+    let dup = await db.collection("user").findOne({ username: c });
+    if (err) return res.send("업로드 오류");
+    try {
+      if (req.body.title == "" || req.body.content == "") {
+        res.send("다시 입력하세요");
+      } else if (dup) {
+        await db
+          .collection("post")
+          .insertOne({ title: a, content: b, img: req.file.location });
+        res.redirect("/list");
+      } else {
+        console.log(c);
+        console.log(dup);
+        res.send("로그인 후 이용하세요.");
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("서버 에러");
     }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("서버 에러");
-  }
+  });
 });
 
 app.get("/detail/:id", async (req, res) => {

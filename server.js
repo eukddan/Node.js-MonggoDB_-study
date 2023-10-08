@@ -125,7 +125,7 @@ app.get("/write", (req, res) => {
   res.render("write.ejs");
 });
 
-app.post("/newpost", async (req, res) => {
+app.post("/newpost", upload.single("img1"), async (req, res) => {
   let a = req.body.title;
   let b = req.body.content;
   let c = req.user.username;
@@ -134,7 +134,9 @@ app.post("/newpost", async (req, res) => {
     if (req.body.title == "" || req.body.content == "") {
       res.send("다시 입력하세요");
     } else if (dup) {
-      await db.collection("post").insertOne({ title: a, content: b });
+      await db
+        .collection("post")
+        .insertOne({ title: a, content: b, img: req.file.location });
       res.redirect("/list");
     } else {
       console.log(c);

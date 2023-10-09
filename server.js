@@ -107,8 +107,8 @@ passport.deserializeUser(async (user, done) => {
   });
 });
 
-app.get("/", (요청, 응답) => {
-  응답.sendFile(__dirname + "/index.html");
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
 });
 
 app.get("/news", (요청, 응답) => {

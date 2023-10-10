@@ -13,7 +13,12 @@
   />
   </head>
   <body class="grey-bg">
+
     <%- include('nav.ejs') %>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="search" aria-label="Recipient's username" aria-describedby="button-addon2">
+      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+    </div>
     <div class="white-bg">
       <% for(let i=0; i<posts.length; i++){ %>
         <div class="list-box">

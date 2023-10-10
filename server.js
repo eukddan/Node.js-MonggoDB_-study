@@ -287,3 +287,11 @@ app.get("/mypage", (req, res) => {
   let result = req.user;
   res.render("mypage.ejs", { result: result });
 });
+
+app.get("/search", async (req, res) => {
+  let result = await db
+    .collection("post")
+    .find({ title: req.query.val })
+    .toArray();
+  res.render("search.ejs", { posts: result });
+});

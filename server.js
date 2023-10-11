@@ -289,9 +289,14 @@ app.get("/mypage", (req, res) => {
 });
 
 app.get("/search", async (req, res) => {
-  let result = await db
-    .collection("post")
-    .find({ title: { $regex: req.query.val } })
-    .toArray();
+  let 검색조건 = [
+    {
+      $search: {
+        index: "title_index",
+        text: { query: req.query.val, path: "title" },
+      },
+    },
+  ];
+  let result = await db.collection("post").aggregate(검색조건).toArray();
   res.render("search.ejs", { posts: result });
 });
